@@ -1,26 +1,216 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* ---------------------------------------------------
+   Global Variables
+--------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --nav-height: 70px;
+    --viewport-height: 100vh;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@supports (height: 100svh) {
+    :root {
+        --viewport-height: 100svh;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------------------------------------------------
+   Global Resets & Defaults (Dark Mode Only)
+--------------------------------------------------- */
+html {
+    height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    /* Always use dark mode colors */
+    @apply bg-gray-950 text-white;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overscroll-behavior: none;
+}
+
+#__next {
+    height: 100%;
+}
+
+/* ---------------------------------------------------
+   Utility Fixes
+--------------------------------------------------- */
+html,
+body,
+#__next {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* === Smooth double wave animation === */
+@keyframes smoothWave {
+    0%,
+    10% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(15deg);
+    }
+    30% {
+        transform: rotate(-10deg);
+    }
+    40% {
+        transform: rotate(12deg);
+    }
+    50%,
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.animate-smooth-wave {
+    display: inline-block;
+    animation: smoothWave 6s ease-in-out infinite;
+    transform-origin: 70% 70%;
+}
+
+/* === Bubble-like speech effect === */
+.bubble-shape {
+    border-radius: 50px;
+    position: relative;
+    display: inline-block;
+}
+
+/* Accent link hover states */
+a {
+    @apply transition-colors duration-200;
+}
+
+a:hover {
+    @apply text-accent-primary;
+}
+
+@layer utilities {
+    /* === Social link hover bubble === */
+    .social-hover-bubble {
+      @apply absolute left-6 top-1/2 -translate-y-1/2 
+             opacity-0 group-hover:opacity-100 group-hover:translate-x-2 
+             transition-all bg-accent-primary text-white text-sm font-medium 
+             px-3 py-1 rounded-r-full rounded-l-none shadow-md whitespace-nowrap pointer-events-none;
+    }
+}
+
+/* ===== Scrollbar Styling ===== */
+
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  width: 8px;              /* slim scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* fully transparent track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2); /* semi-transparent thumb */
+  border-radius: 9999px;                      /* pill shape */
+  border: 2px solid transparent;              /* spacing around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4); /* brighter on hover */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;                                      /* slim scrollbar */
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;      /* thumb + track */
+}
+
+/* Hide scrollbar — Chrome, Edge, Safari */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar — Firefox */
+.no-scrollbar {
+    scrollbar-width: none;
+}
+
+@keyframes marquee-ultra-smooth {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-33.3333%);
+    }
+}
+
+.marquee-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 0; /* CHANGED: Remove gap for seamless loop */
+    animation: marquee-ultra-smooth 55s linear infinite;  /* UPDATED: Default to 55s, but overridden by inline styles in component */
+    will-change: transform;
+    transform-style: preserve-3d;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.marquee-item {
+    transition: transform 0.1s linear;  /* UPDATED: Ultra-fast and constant speed for instant hover */
+    margin-right: 24px; /* ADDED: Use margin instead of gap */
+}
+
+.marquee-item:hover {
+    transform: scale(1.08);
+    z-index: 10;
+}
+
+/* UPDATED: Disable hover scaling and pause during page load animation */
+.disable-hover .marquee-item:hover {
+    transform: none;  /* Prevents scaling when class is applied */
+}
+
+.disable-hover.marquee-track:hover {
+    animation-play-state: running;  /* Keeps marquee running on hover during load */
+}
+
+@media (max-width: 640px) {
+
+    html,
+    body,
+    #__next {
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 640px) {
+    .marquee-item {
+        margin-right: 12px;
+    }
+}
+
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slideDown {
+    animation: slideDown 0.25s ease-out forwards;
 }
