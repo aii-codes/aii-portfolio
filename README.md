@@ -33,11 +33,3 @@ Showcases all major projects, skills, tools, and real working apps.
 ## 🚀 Live Website
 
 👉 **https://aii-portfolio-lilac.vercel.app/**
-
----
-
-## 🧪 Run Locally
-
-```bash
-npm install
-npm run dev
